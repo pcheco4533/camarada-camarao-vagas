@@ -1,0 +1,38 @@
+{
+  "id": "./",
+  "name": "Camarada Camarão Vagas",
+  "short_name": "Camarada Vagas",
+  "description": "Candidate-se às vagas do restaurante Camarada Camarão: envie seu currículo e conte sua história.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EAF2F1",
+  "theme_color": "#D9503B",
+  "categories": [
+    "business",
+    "food"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

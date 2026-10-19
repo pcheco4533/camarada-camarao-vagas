@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trabalhe no Camarada Camarão</title>
+<meta name="description" content="Candidate-se às vagas do restaurante Camarada Camarão.">
+<meta name="theme-color" content="#D9503B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Camarada Vagas">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: coluna única de 640px; faixa de marca no topo, barra de progresso, um cartão por etapa, navegação no rodapé do cartão */
+:root {
+  --bg: #EAF2F1;
+  --surface: #FFFFFF;
+  --ink: #12303E;
+  --muted: #557079;
+  --line: #CADADA;
+  --accent: #D9503B;      /* coral de camarão */
+  --accent-soft: #FCE6E1;
+  --accent-ink: #FFFFFF;
+  --sea: #1C6669;
+  --error: #B3261E;
+  --ok: #1D7A4A;
+  --display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1C22; --surface: #142932; --ink: #E4EFEE; --muted: #9AB2B7; --line: #284652;
+    --accent: #FF7A64; --accent-soft: #3A211C; --accent-ink: #1B0B07; --sea: #63BDBA;
+    --error: #FF8A80; --ok: #72D6A0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1C22; --surface: #142932; --ink: #E4EFEE; --muted: #9AB2B7; --line: #284652;
+  --accent: #FF7A64; --accent-soft: #3A211C; --accent-ink: #1B0B07; --sea: #63BDBA;
+  --error: #FF8A80; --ok: #72D6A0; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0;
+}
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.demo {
+  font-size: 13px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand .name {
+  font-family: var(--display);
+  font-size: clamp(30px, 8vw, 40px);
+  line-height: 1.05;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+}
+.brand .tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sea);
+}
+
+.progress { display: flex; flex-direction: column; gap: 8px; }
+.progress-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
+.progress-top strong { color: var(--ink); font-weight: 700; }
+.bar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .35s ease; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+@media (min-width: 560px) { .card { padding: 30px 28px; } }
+
+h1, h2 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; line-height: 1.15; }
+h1 { font-size: clamp(28px, 7vw, 36px); }
+h2 { font-size: 26px; }
+.lead { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.facts { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.facts li { display: flex; gap: 10px; align-items: baseline; }
+.facts li::before { content: ""; flex: 0 0 8px; height: 8px; border-radius: 50%; background: var(--sea); transform: translateY(-1px); }
+
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field > label, .field > .label { font-weight: 600; }
+.req { color: var(--accent); }
+.hint { font-size: 14px; color: var(--muted); margin: 0; }
+input[type="text"], input[type="tel"], input[type="email"], select, textarea {
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 100%;
+}
+textarea { min-height: 112px; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, .chip input:focus-visible + span {
+  outline: 3px solid var(--sea);
+  outline-offset: 2px;
+}
+input[type="file"] { font: inherit; color: var(--muted); max-width: 100%; }
+.count { font-size: 12px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+.err { font-size: 14px; color: var(--error); margin: 0; }
+.field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--error); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip span {
+  display: inline-block;
+  padding: 9px 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background .15s, border-color .15s;
+}
+.chip input:checked + span { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); font-weight: 700; }
+
+.role-block {
+  border-left: 3px solid var(--sea);
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.role-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--sea); margin: 0; }
+
+.check { display: flex; gap: 10px; align-items: flex-start; }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: 0 0 auto; }
+
+.nav { display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+button {
+  font: inherit;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 13px 22px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); margin-left: auto; }
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-primary[disabled] { opacity: .6; cursor: wait; }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--muted); }
+
+.done { text-align: left; }
+.done .big { font-family: var(--display); font-size: 44px; color: var(--accent); line-height: 1; }
+
+.foot { font-size: 13px; color: var(--muted); text-align: center; }
+.hp { position: absolute; left: -9999px; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+.install {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--accent);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+.install img { width: 48px; height: 48px; border-radius: 12px; flex: 0 0 auto; }
+.install .txt { flex: 1; min-width: 0; font-size: 14px; color: var(--muted); }
+.install .txt strong { display: block; color: var(--ink); font-size: 15px; }
+.install button { padding: 10px 16px; margin: 0; }
+.install .close { background: transparent; color: var(--muted); padding: 6px 8px; font-size: 20px; line-height: 1; border: 0; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo" id="demoNote" hidden>Prévia: as inscrições feitas aqui não ficam salvas. No app instalado, elas vão direto para a planilha do restaurante.</p>
+  <div class="install" id="installBox" hidden>
+    <img src="icons/icon-192.png" alt="">
+    <div class="txt" id="installTxt"><strong>Instale o app</strong>Fica na sua tela inicial e abre mais rápido.</div>
+    <button type="button" class="btn-primary" id="installBtn">Instalar</button>
+    <button type="button" class="close" id="installClose" aria-label="Fechar">×</button>
+  </div>
+
+  <header class="brand">
+    <span class="name">Camarada Camarão</span>
+    <span class="tag">Trabalhe com a gente</span>
+  </header>
+
+  <div class="progress" id="progress" hidden>
+    <div class="progress-top"><span>Etapa <strong id="stepNum">1</strong> de 7</span><span id="stepName">Dados básicos</span></div>
+    <div class="bar"><span id="barFill"></span></div>
+  </div>
+
+  <form class="card" id="form" name="candidatura" novalidate>
+    <p class="hp"><label>Não preencha: <input name="bot-field" id="bot-field"></label></p>
+    <input type="hidden" name="turnos" id="turnos">
+
+    <!-- INTRO -->
+    <section class="step" data-title="Início">
+      <h1>Vem ser camarada do nosso time</h1>
+      <p class="lead">Aqui a gente quer conhecer a pessoa, não só o currículo. A inscrição leva uns 10 minutos e você pode contar sua história do seu jeito.</p>
+      <ul class="facts">
+        <li>Vagas para atendimento, cozinha, caixa e entrega</li>
+        <li>Não precisa ter currículo pronto</li>
+        <li>Nunca cobramos taxa para se candidatar</li>
+        <li id="prazoTxt">Retornamos para todo mundo pelo WhatsApp</li>
+      </ul>
+    </section>
+
+    <!-- 1 DADOS -->
+    <section class="step" data-title="Dados básicos" hidden>
+      <h2>Primeiro, seus dados</h2>
+      <div class="field">
+        <label for="nome">Nome completo <span class="req">*</span></label>
+        <input type="text" id="nome" name="nome" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="whatsapp">WhatsApp para contato <span class="req">*</span></label>
+        <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" required pattern="[\d\s()+-]{10,}">
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="bairro">Bairro onde mora <span class="req">*</span></label>
+        <input type="text" id="bairro" name="bairro" required>
+      </div>
+      <div class="field" data-group="vaga">
+        <span class="label">Vaga de interesse <span class="req">*</span></span>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="vaga" id="vaga-garcom" value="Garçom / Garçonete" data-role="garcom" required><span>Garçom / Garçonete</span></label>
+          <label class="chip"><input type="radio" name="vaga" id="vaga-cozinheiro" value="Cozinheiro(a)" data-role="cozinha"><span>Cozinheiro(a)</span></label>
+          <label class="chip"><input type="radio" name="vaga" id="vaga-auxiliar" value="Auxiliar de cozinha" data-role="cozinha"><span>Auxiliar de cozinha</span></label>
+          <label class="chip"><input type="radio" name="vaga" id="vaga-caixa" value="Caixa" data-role="caixa"><span>Caixa</span></label>
+          <label class="chip"><input type="radio" name="vaga" id="vaga-entrega" value="Entregador(a)" data-role="entrega"><span>Entregador(a)</span></label>
+          <label class="chip"><input type="radio" name="vaga" id="vaga-outra" value="Outra" data-role=""><span>Outra</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="curriculo">Currículo (opcional)</label>
+        <p class="hint">PDF, Word ou foto, até 5 MB. Não tem currículo? Tudo bem, as próximas perguntas já contam sua história.</p>
+        <input type="file" id="curriculo" name="curriculo" accept=".pdf,.doc,.docx,image/*">
+      </div>
+    </section>
+
+    <!-- 2 SOBRE VOCÊ -->
+    <section class="step" data-title="Sobre você" hidden>
+      <h2>Conte sobre você</h2>
+      <p class="lead">Escreva como se estivesse conversando com a gente. Não precisa ser texto bonito.</p>
+      <div class="field">
+        <label for="apresentacao">Como você se apresentaria para alguém que acabou de te conhecer? <span class="req">*</span></label>
+        <textarea id="apresentacao" name="apresentacao" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="qualidades">Quais são suas três maiores qualidades? <span class="req">*</span></label>
+        <input type="text" id="qualidades" name="qualidades" maxlength="150" required>
+      </div>
+      <div class="field">
+        <label for="colegas">O que as pessoas que trabalharam com você diriam sobre você?</label>
+        <textarea id="colegas" name="colegas" maxlength="500"></textarea>
+      </div>
+      <div class="field">
+        <label for="tempo_livre">O que você gosta de fazer no tempo livre?</label>
+        <input type="text" id="tempo_livre" name="tempo_livre" maxlength="150">
+      </div>
+    </section>
+
+    <!-- 3 EXPERIÊNCIA -->
+    <section class="step" data-title="Experiência" hidden>
+      <h2>Sua experiência</h2>
+      <div class="field" data-group="experiencia">
+        <span class="label">Já trabalhou em restaurante, bar, lanchonete ou com atendimento? <span class="req">*</span></span>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="experiencia_restaurante" id="exp-sim" value="Sim" required><span>Sim</span></label>
+          <label class="chip"><input type="radio" name="experiencia_restaurante" id="exp-nao" value="Não"><span>Não</span></label>
+        </div>
+      </div>
+      <div class="field" id="expDetalhes" hidden>
+        <label for="experiencia_detalhes">Onde, por quanto tempo e o que você fazia?</label>
+        <textarea id="experiencia_detalhes" name="experiencia_detalhes" maxlength="500"></textarea>
+      </div>
+      <div class="field">
+        <label for="situacao_dificil">Conte uma situação difícil que você resolveu, no trabalho ou na vida, e como você agiu. <span class="req">*</span></label>
+        <textarea id="situacao_dificil" name="situacao_dificil" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="cursos">Tem algum curso ou habilidade que queira destacar?</label>
+        <input type="text" id="cursos" name="cursos" maxlength="200">
+      </div>
+    </section>
+
+    <!-- 4 NOVO TRABALHO -->
+    <section class="step" data-title="O novo trabalho" hidden>
+      <h2>Como você imagina o trabalho aqui</h2>
+      <div class="field">
+        <label for="por_que">Por que você quer trabalhar no Camarada Camarão? <span class="req">*</span></label>
+        <textarea id="por_que" name="por_que" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="dia_normal">Como você imagina um dia normal de trabalho aqui? <span class="req">*</span></label>
+        <textarea id="dia_normal" name="dia_normal" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="ambiente">Para você, o que é um bom ambiente de trabalho?</label>
+        <textarea id="ambiente" name="ambiente" maxlength="500"></textarea>
+      </div>
+      <div class="field">
+        <label for="pressao">Como você lida com dias de muito movimento e pressão? <span class="req">*</span></label>
+        <textarea id="pressao" name="pressao" maxlength="500" required></textarea>
+      </div>
+
+      <div class="role-block" data-role-block="garcom" hidden>
+        <p class="role-title">Perguntas da vaga de atendimento</p>
+        <div class="field">
+          <label for="garcom_cliente">Um cliente reclama que o prato chegou frio e está irritado. O que você faz?</label>
+          <textarea id="garcom_cliente" name="garcom_cliente" maxlength="500"></textarea>
+        </div>
+        <div class="field">
+          <label for="garcom_indicacao">Como você indicaria um prato para um cliente em dúvida?</label>
+          <textarea id="garcom_indicacao" name="garcom_indicacao" maxlength="500"></textarea>
+        </div>
+      </div>
+      <div class="role-block" data-role-block="cozinha" hidden>
+        <p class="role-title">Perguntas da vaga de cozinha</p>
+        <div class="field">
+          <label for="cozinha_pratos">Que pratos ou preparos você sabe fazer bem?</label>
+          <textarea id="cozinha_pratos" name="cozinha_pratos" maxlength="500"></textarea>
+        </div>
+        <div class="field">
+          <label for="cozinha_organizacao">Como você mantém a organização e a limpeza durante o serviço?</label>
+          <textarea id="cozinha_organizacao" name="cozinha_organizacao" maxlength="500"></textarea>
+        </div>
+      </div>
+      <div class="role-block" data-role-block="caixa" hidden>
+        <p class="role-title">Pergunta da vaga de caixa</p>
+        <div class="field">
+          <label for="caixa_diferenca">O caixa fechou com diferença no fim do dia. Qual seria sua atitude?</label>
+          <textarea id="caixa_diferenca" name="caixa_diferenca" maxlength="500"></textarea>
+        </div>
+      </div>
+      <div class="role-block" data-role-block="entrega" hidden>
+        <p class="role-title">Perguntas da vaga de entrega</p>
+        <div class="field">
+          <span class="label">Tem CNH e moto própria?</span>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="entrega_cnh_moto" id="cnh-sim" value="Sim, as duas"><span>Sim, as duas</span></label>
+            <label class="chip"><input type="radio" name="entrega_cnh_moto" id="cnh-so" value="Só CNH"><span>Só CNH</span></label>
+            <label class="chip"><input type="radio" name="entrega_cnh_moto" id="cnh-nao" value="Não"><span>Não</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="entrega_ausente">O cliente não atende no endereço da entrega. O que você faz?</label>
+          <textarea id="entrega_ausente" name="entrega_ausente" maxlength="500"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 CONQUISTAS -->
+    <section class="step" data-title="Seus objetivos" hidden>
+      <h2>O que você quer conquistar</h2>
+      <div class="field">
+        <label for="conquistar">O que você espera conquistar trabalhando com a gente? <span class="req">*</span></label>
+        <textarea id="conquistar" name="conquistar" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="um_ano">Onde você se vê daqui a 1 ano dentro da empresa? <span class="req">*</span></label>
+        <textarea id="um_ano" name="um_ano" maxlength="500" required></textarea>
+      </div>
+      <div class="field">
+        <label for="sonho">Tem algum sonho pessoal que esse trabalho pode te ajudar a realizar?</label>
+        <textarea id="sonho" name="sonho" maxlength="500"></textarea>
+      </div>
+      <div class="field">
+        <label for="aprender">O que você gostaria de aprender aqui?</label>
+        <input type="text" id="aprender" name="aprender" maxlength="200">
+      </div>
+    </section>
+
+    <!-- 6 DISPONIBILIDADE -->
+    <section class="step" data-title="Disponibilidade" hidden>
+      <h2>Sua disponibilidade</h2>
+      <div class="field" data-group="turnos">
+        <span class="label">Quais turnos você pode trabalhar? <span class="req">*</span></span>
+        <p class="hint">Pode marcar mais de um.</p>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" class="turno" id="t-manha" value="Manhã"><span>Manhã</span></label>
+          <label class="chip"><input type="checkbox" class="turno" id="t-tarde" value="Tarde"><span>Tarde</span></label>
+          <label class="chip"><input type="checkbox" class="turno" id="t-noite" value="Noite"><span>Noite</span></label>
+          <label class="chip"><input type="checkbox" class="turno" id="t-fds" value="Fins de semana"><span>Fins de semana</span></label>
+          <label class="chip"><input type="checkbox" class="turno" id="t-feriados" value="Feriados"><span>Feriados</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="inicio">Pode começar quando? <span class="req">*</span></label>
+        <select id="inicio" name="inicio" required>
+          <option value="">Escolha uma opção</option>
+          <option>Imediatamente</option>
+          <option>Em até 15 dias</option>
+          <option>Em até 30 dias</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="transporte">Como você chegaria ao restaurante? <span class="req">*</span></label>
+        <select id="transporte" name="transporte" required>
+          <option value="">Escolha uma opção</option>
+          <option>A pé</option>
+          <option>Ônibus ou metrô</option>
+          <option>Moto</option>
+          <option>Carro</option>
+          <option>Bicicleta</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- 7 FINAL -->
+    <section class="step" data-title="Envio" hidden>
+      <h2>Quase lá</h2>
+      <div class="field">
+        <label for="algo_mais">Tem algo que não perguntamos e que você gostaria que a gente soubesse?</label>
+        <textarea id="algo_mais" name="algo_mais" maxlength="500"></textarea>
+      </div>
+      <div class="field">
+        <label for="como_soube">Como ficou sabendo da vaga? <span class="req">*</span></label>
+        <select id="como_soube" name="como_soube" required>
+          <option value="">Escolha uma opção</option>
+          <option>Instagram</option>
+          <option>WhatsApp</option>
+          <option>Indicação de alguém</option>
+          <option>Cartaz no restaurante</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="check" for="autorizacao">
+          <input type="checkbox" id="autorizacao" name="autorizacao" value="Autorizado" required>
+          <span>Autorizo o Camarada Camarão a usar meus dados apenas para este processo seletivo. <span class="req">*</span></span>
+        </label>
+      </div>
+      <p class="err" id="sendErr" hidden></p>
+    </section>
+
+    <!-- SUCESSO -->
+    <section class="step done" data-title="Enviado" hidden>
+      <span class="big">Valeu!</span>
+      <h2 id="doneTitle">Inscrição enviada</h2>
+      <p class="lead" id="doneText">Obrigado por contar sua história pra gente. Vamos ler tudo com atenção e falar com você pelo WhatsApp.</p>
+    </section>
+
+    <div class="nav" id="nav">
+      <button type="button" class="btn-ghost" id="backBtn" hidden>Voltar</button>
+      <button type="button" class="btn-primary" id="nextBtn">Começar inscrição</button>
+    </div>
+  </form>
+
+  <p class="foot">Camarada Camarão · Nunca pedimos dinheiro, Pix ou documentos nesta etapa.</p>
+</div>
+
+<script>
+/* ===== EDITE AQUI ===== */
+var CONFIG = {
+  /* Cole aqui o link do Apps Script (termina em /exec). Veja o passo a passo no LEIA-ME. */
+  planilha: "",
+  prazo: "",                 /* ex.: "30/11". Deixe vazio se não tiver prazo */
+  retorno: "em até 10 dias"  /* quando vocês respondem os candidatos */
+};
+/* ====================== */
+
+(function () {
+  var form = document.getElementById("form");
+  var steps = Array.prototype.slice.call(form.querySelectorAll(".step"));
+  var LAST_Q = steps.length - 2;   /* última etapa com perguntas */
+  var DONE = steps.length - 1;
+  var cur = 0;
+  var nextBtn = document.getElementById("nextBtn");
+  var backBtn = document.getElementById("backBtn");
+  var DEMO = /claude|anthropic/.test(location.hostname);
+  var DRAFT_KEY = "camarada-candidatura";
+
+  if (DEMO) document.getElementById("demoNote").hidden = false;
+  if (CONFIG.prazo) {
+    document.getElementById("prazoTxt").textContent = "Inscrições até " + CONFIG.prazo + ". Retornamos " + CONFIG.retorno + " pelo WhatsApp";
+  } else if (CONFIG.retorno) {
+    document.getElementById("prazoTxt").textContent = "Retornamos para todo mundo " + CONFIG.retorno + " pelo WhatsApp";
+  }
+
+  /* contadores de caracteres */
+  form.querySelectorAll("textarea[maxlength]").forEach(function (ta) {
+    var c = document.createElement("div");
+    c.className = "count";
+    ta.insertAdjacentElement("afterend", c);
+    var upd = function () { c.textContent = ta.value.length + "/" + ta.maxLength; };
+    ta.addEventListener("input", upd);
+    ta._count = upd;
+    upd();
+  });
+
+  /* rascunho no aparelho do candidato */
+  function saveDraft() {
+    try {
+      var data = {};
+      form.querySelectorAll("input, textarea, select").forEach(function (el) {
+        if (!el.id || el.type === "file" || el.type === "hidden" || el.id === "bot-field") return;
+        data[el.id] = (el.type === "checkbox" || el.type === "radio") ? el.checked : el.value;
+      });
+      data._step = cur;
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return 0;
+      var data = JSON.parse(raw);
+      Object.keys(data).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === "checkbox" || el.type === "radio") el.checked = !!data[id];
+        else el.value = data[id];
+        if (el._count) el._count();
+      });
+      var s = parseInt(data._step, 10);
+      return (s > 0 && s <= LAST_Q) ? s : 0;
+    } catch (e) { return 0; }
+  }
+  function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+
+  /* campos condicionais */
+  function syncConditionals() {
+    var vaga = form.querySelector('input[name="vaga"]:checked');
+    var role = vaga ? vaga.getAttribute("data-role") : "";
+    form.querySelectorAll("[data-role-block]").forEach(function (b) {
+      b.hidden = b.getAttribute("data-role-block") !== role;
+    });
+    var exp = document.getElementById("exp-sim").checked;
+    document.getElementById("expDetalhes").hidden = !exp;
+  }
+  form.addEventListener("change", function () { syncConditionals(); saveDraft(); });
+  form.addEventListener("input", saveDraft);
+
+  /* validação da etapa atual */
+  function clearErrors(step) {
+    step.querySelectorAll(".field.invalid").forEach(function (f) { f.classList.remove("invalid"); });
+    step.querySelectorAll(".field > .err").forEach(function (e) { e.remove(); });
+  }
+  function flag(field, msg) {
+    field.classList.add("invalid");
+    var p = document.createElement("p");
+    p.className = "err";
+    p.textContent = msg;
+    field.appendChild(p);
+  }
+  function validate(step) {
+    clearErrors(step);
+    var firstBad = null;
+    step.querySelectorAll(".field").forEach(function (field) {
+      if (field.closest("[hidden]")) return;
+      var group = field.getAttribute("data-group");
+      var bad = null;
+      if (group === "turnos") {
+        if (!step.querySelector(".turno:checked")) bad = "Marque pelo menos um turno.";
+      } else if (group) {
+        var radios = field.querySelectorAll('input[type="radio"]');
+        if (radios.length && radios[0].required && !field.querySelector('input[type="radio"]:checked')) bad = "Escolha uma opção.";
+      } else {
+        var el = field.querySelector("input:not([type=radio]), textarea, select");
+        if (!el) return;
+        if (el.type === "checkbox") {
+          if (el.required && !el.checked) bad = "Precisamos da sua autorização para continuar.";
+        } else if (el.type === "file") {
+          if (el.files && el.files[0] && el.files[0].size > 5 * 1024 * 1024) bad = "O arquivo passou de 5 MB. Envie um arquivo menor ou pule este campo.";
+        } else {
+          el.value = el.value.replace(/^\s+/, "");
+          if (el.required && !el.value.trim()) bad = "Este campo é obrigatório.";
+          else if (el.value && !el.checkValidity()) {
+            bad = el.type === "email" ? "Confira o e-mail digitado." :
+                  el.type === "tel" ? "Digite o número com DDD, ex.: (11) 90000-0000." : "Confira este campo.";
+          }
+        }
+      }
+      if (bad) { flag(field, bad); if (!firstBad) firstBad = field; }
+    });
+    if (firstBad) {
+      var focusable = firstBad.querySelector("input, textarea, select");
+      firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (focusable) focusable.focus({ preventScroll: true });
+      return false;
+    }
+    return true;
+  }
+
+  /* navegação */
+  function show(i) {
+    cur = i;
+    steps.forEach(function (s, k) { s.hidden = k !== i; });
+    var prog = document.getElementById("progress");
+    prog.hidden = i === 0 || i === DONE;
+    if (i > 0 && i <= LAST_Q) {
+      document.getElementById("stepNum").textContent = i;
+      document.getElementById("stepName").textContent = steps[i].getAttribute("data-title");
+      document.getElementById("barFill").style.width = (i / LAST_Q * 100) + "%";
+    }
+    backBtn.hidden = i === 0 || i === DONE;
+    document.getElementById("nav").hidden = i === DONE;
+    nextBtn.textContent = i === 0 ? (loadedStep ? "Continuar de onde parei" : "Começar inscrição")
+                        : i === LAST_Q ? "Enviar inscrição" : "Continuar";
+    if (i !== DONE && i !== 0) saveDraft();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function encodeTurnos() {
+    var t = Array.prototype.map.call(form.querySelectorAll(".turno:checked"), function (c) { return c.value; });
+    document.getElementById("turnos").value = t.join(", ");
+  }
+
+  function submit() {
+    encodeTurnos();
+    var err = document.getElementById("sendErr");
+    err.hidden = true;
+    nextBtn.disabled = true;
+    nextBtn.textContent = "Enviando…";
+    var nome = (document.getElementById("nome").value.trim().split(/\s+/)[0]) || "";
+
+    var finish = function () {
+      clearDraft();
+      document.getElementById("doneTitle").textContent = nome ? "Inscrição enviada, " + nome + "!" : "Inscrição enviada!";
+      document.getElementById("doneText").textContent = "Obrigado por contar sua história pra gente. Vamos ler tudo com atenção e falar com você pelo WhatsApp " + CONFIG.retorno + ".";
+      show(DONE);
+    };
+
+    var fail = function (msg) {
+      err.textContent = msg || "Não conseguimos enviar agora. Confira sua internet e toque em Enviar de novo. Suas respostas continuam salvas aqui.";
+      err.hidden = false;
+      nextBtn.disabled = false;
+      nextBtn.textContent = "Enviar inscrição";
+    };
+
+    if (DEMO) { setTimeout(finish, 600); return; }
+    if (!CONFIG.planilha) { fail("O app ainda não está ligado à planilha do restaurante. Avise a equipe do Camarada Camarão."); return; }
+    if (!navigator.onLine) { fail("Você está sem internet. Conecte e toque em Enviar de novo. Suas respostas continuam salvas aqui."); return; }
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) {
+      if (typeof v === "string") data[k] = v;
+    });
+
+    readFile(document.getElementById("curriculo").files[0])
+      .then(function (file) {
+        if (file) data.curriculo = file;
+        /* text/plain evita bloqueio do navegador; o Apps Script lê o JSON normalmente */
+        return fetch(CONFIG.planilha, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data)
+        });
+      })
+      .then(finish)
+      .catch(function () { fail(); });
+  }
+
+  function readFile(f) {
+    return new Promise(function (resolve, reject) {
+      if (!f) { resolve(null); return; }
+      var r = new FileReader();
+      r.onload = function () {
+        var base64 = String(r.result).split(",")[1] || "";
+        resolve({ name: f.name, type: f.type || "application/octet-stream", data: base64 });
+      };
+      r.onerror = function () { reject(r.error); };
+      r.readAsDataURL(f);
+    });
+  }
+
+  nextBtn.addEventListener("click", function () {
+    if (cur === 0) { show(loadedStep || 1); return; }
+    if (!validate(steps[cur])) return;
+    if (cur === LAST_Q) { submit(); return; }
+    show(cur + 1);
+  });
+  backBtn.addEventListener("click", function () { if (cur > 1) show(cur - 1); else show(0); });
+  form.addEventListener("submit", function (e) { e.preventDefault(); nextBtn.click(); });
+
+  var loadedStep = loadDraft();
+  syncConditionals();
+  show(0);
+})();
+
+/* ===== App instalável ===== */
+(function () {
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+
+  var box = document.getElementById("installBox");
+  var btn = document.getElementById("installBtn");
+  var txt = document.getElementById("installTxt");
+  var KEY = "camarada-install-fechado";
+  var standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  var dismissed = false;
+  try { dismissed = localStorage.getItem(KEY) === "1"; } catch (e) {}
+  if (standalone || dismissed) return;
+
+  document.getElementById("installClose").addEventListener("click", function () {
+    box.hidden = true;
+    try { localStorage.setItem(KEY, "1"); } catch (e) {}
+  });
+
+  /* Android e computador: o navegador oferece instalar */
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+    box.hidden = false;
+  });
+  btn.addEventListener("click", function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.finally(function () { deferred = null; box.hidden = true; });
+  });
+  window.addEventListener("appinstalled", function () { box.hidden = true; });
+
+  /* iPhone: a Apple não tem botão de instalar, então mostramos o passo a passo */
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (ios) {
+    btn.hidden = true;
+    txt.innerHTML = "<strong>Instale o app no iPhone</strong>Toque em Compartilhar e depois em “Adicionar à Tela de Início”.";
+    box.hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
